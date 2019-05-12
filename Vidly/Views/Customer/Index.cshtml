@@ -1,0 +1,24 @@
+﻿@model IList<Customer>
+
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var customer in Model)
+        {
+            <li class="list-group-item">
+                <a asp-controller="Customer" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <text>No customers</text>
+}

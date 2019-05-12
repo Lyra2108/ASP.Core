@@ -7,10 +7,28 @@ namespace Vidly.Controllers
 {
     public class MoviesController : Controller
     {
-        // GET: Movies/Random
-        public ViewResult Random()
+        private readonly List<Movie> _movies = new List<Movie>
         {
-            var movie = new Movie {Name = "Shrek!"};
+            new Movie
+            {
+                Id = 0,
+                Name = "1"
+            },
+            new Movie
+            {
+                Id = 1,
+                Name = "2"
+            }
+        };
+
+        // GET: Movies/Random
+        public ViewResult Index()
+        {
+            return View(_movies);
+        }
+
+        public ViewResult Details(int id)
+        {
             var customers = new List<Customer>
             {
                 new Customer {Name = "1"},
@@ -22,10 +40,9 @@ namespace Vidly.Controllers
 
             var viewModel = new RandomMovieViewModel
             {
-                Movie = movie,
+                Movie = _movies[id],
                 Customers = customers
             };
-
             return View(viewModel);
         }
 
