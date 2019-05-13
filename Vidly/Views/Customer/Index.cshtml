@@ -1,4 +1,4 @@
-﻿@model Microsoft.EntityFrameworkCore.DbSet<Customer>
+﻿@model List<Customer>
 
 @{
     ViewBag.Title = "Customers";
@@ -9,14 +9,23 @@
 
 @if (Model.Any())
 {
-    <ul class="list-group">
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Customer name</th>
+            <th>Membership Type</th>
+        </tr>
         @foreach (var customer in Model)
         {
-            <li class="list-group-item">
-                <a asp-controller="Customer" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>
-            </li>
+            <tr>
+                <td>
+                    <a asp-controller="Customer" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>
+                </td>
+                <td>
+                    @customer.MembershipType.Name
+                </td>
+            </tr>
         }
-    </ul>
+    </table>
 }
 else
 {
