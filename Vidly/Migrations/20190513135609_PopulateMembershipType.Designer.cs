@@ -9,7 +9,7 @@ using Vidly.Models;
 namespace Vidly.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190513125325_PopulateMembershipType")]
+    [Migration("20190513135609_PopulateMembershipType")]
     partial class PopulateMembershipType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,7 +30,9 @@ namespace Vidly.Migrations
 
                     b.Property<byte>("MembershipTypeId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
@@ -52,6 +54,13 @@ namespace Vidly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MembershipType");
+
+                    b.HasData(
+                        new { Id = (byte)1, DiscountRate = (byte)0, DurationInMonth = (byte)0, SignUpFee = (short)0 },
+                        new { Id = (byte)2, DiscountRate = (byte)10, DurationInMonth = (byte)1, SignUpFee = (short)30 },
+                        new { Id = (byte)3, DiscountRate = (byte)15, DurationInMonth = (byte)3, SignUpFee = (short)90 },
+                        new { Id = (byte)4, DiscountRate = (byte)20, DurationInMonth = (byte)12, SignUpFee = (short)300 }
+                    );
                 });
 
             modelBuilder.Entity("Vidly.Models.Movie", b =>
