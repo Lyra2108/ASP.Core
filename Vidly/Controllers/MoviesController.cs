@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Vidly.Models;
-using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -23,17 +23,14 @@ namespace Vidly.Controllers
 
         public IActionResult Details(int id)
         {
-            var movie = _context.Movies.SingleOrDefault(dbMovie => dbMovie.Id == id);
-            if(movie == null)
+            var movie = _context.Movies
+                .Include(dbMovie => dbMovie.Genre)
+                .SingleOrDefault(dbMovie => dbMovie.Id == id);
+
+            if (movie == null)
                 return NotFound();
 
-            var viewModel = new RandomMovieViewModel
-            {
-                Movie = movie,
-                Customers = _context.Customers.ToList()
-            };
-
-            return View(viewModel);
+            return View(movie);
         }
 
         // GET: Movies/ByReleaseDate
