@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Vidly.Models;
 
@@ -6,28 +6,26 @@ namespace Vidly.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly IList<Customer> _customers = new List<Customer>
+        private readonly ApplicationDbContext _context;
+
+        public CustomerController(ApplicationDbContext context)
         {
-            new Customer
-            {
-                Id = 0,
-                Name = "abc"
-            },
-            new Customer
-            {
-                Id = 1,
-                Name = "def"
-            }
-        };
+            _context = context;
+        }
 
         public ActionResult Index()
         {
-            return View(_customers);
+            var customers = _context.Customers;
+            return View(customers);
         }
 
         public ActionResult Details(int id)
         {
-            return View(_customers[id]);
+            var customer = _context.Customers.SingleOrDefault(dbCustomer => dbCustomer.Id == id);
+            if (customer == null)
+                return NotFound();
+
+            return View(customer);
         }
     }
 }
