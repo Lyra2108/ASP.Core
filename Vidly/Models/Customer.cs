@@ -21,6 +21,7 @@ namespace Vidly.Models
 
         [Display(Name = "Membership type")]
         public MembershipType MembershipType { get; set; }
-        public byte MembershipTypeId { get; set; }
+        [Required]
+        public byte? MembershipTypeId { get; set; }
     }
 }

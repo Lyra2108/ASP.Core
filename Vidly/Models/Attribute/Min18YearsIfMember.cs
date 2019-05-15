@@ -10,7 +10,7 @@ namespace Vidly.Models.Attribute
             if (!(validationContext.ObjectInstance is Customer customer))
                 return new ValidationResult("Wrong type it can only validate customers");
 
-            if (customer.MembershipTypeId == MembershipType.Unknown
+            if ((customer.MembershipTypeId ?? 0) == MembershipType.Unknown
                 || customer.MembershipTypeId == MembershipType.PayAsYouGo)
                 return ValidationResult.Success;
 
