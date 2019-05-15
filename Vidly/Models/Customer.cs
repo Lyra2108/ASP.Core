@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Vidly.Models.Attribute;
 
 namespace Vidly.Models
 {
@@ -12,6 +13,7 @@ namespace Vidly.Models
         public string Name { get; set; }
 
         [Display(Name = "Date of birth")]
+        [Min18YearsIfMember]
         public DateTime? Birthdate { get; set; }
 
         [Display(Name = "Is subscribed to newsletter")]
