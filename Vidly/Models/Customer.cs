@@ -1,11 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using AutoMapper.Configuration.Annotations;
+using Vidly.Dto;
 using Vidly.Models.Attribute;
 
 namespace Vidly.Models
 {
+    [AutoMap(typeof(CustomerDto))]
     public class Customer
     {
+        [Ignore]
         public int Id { get; set; }
 
         [Required]
@@ -19,8 +24,10 @@ namespace Vidly.Models
         [Display(Name = "Is subscribed to newsletter")]
         public bool IsSubscribedToNewsletter { get; set; }
 
+        [Ignore]
         [Display(Name = "Membership type")]
         public MembershipType MembershipType { get; set; }
+
         [Required]
         public byte? MembershipTypeId { get; set; }
     }

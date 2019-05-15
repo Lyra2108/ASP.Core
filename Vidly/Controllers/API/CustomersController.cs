@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Vidly.Dto;
 using Vidly.Models;
 
 namespace Vidly.Controllers.API
@@ -12,10 +14,12 @@ namespace Vidly.Controllers.API
     public class CustomersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private IMapper _mapper;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -35,11 +39,12 @@ namespace Vidly.Controllers.API
         }
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer(Customer customer)
+        public async Task<ActionResult<Customer>> CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var customer = _mapper.Map<Customer>(customerDto);
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
@@ -47,7 +52,7 @@ namespace Vidly.Controllers.API
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int id, Customer customer)
+        public async Task<ActionResult<Customer>> UpdateCustomer(int id, CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -55,12 +60,8 @@ namespace Vidly.Controllers.API
             var customerInDb = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
             if (customerInDb == null)
                 return NotFound();
-            
-            customerInDb.Name = customer.Name;
-            customerInDb.Birthdate = customer.Birthdate;
-            customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
-            customerInDb.MembershipTypeId = customer.MembershipTypeId;
 
+            _mapper.Map(customerDto, customerInDb);
             await _context.SaveChangesAsync();
 
             return Ok(customerInDb);
