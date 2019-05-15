@@ -1,4 +1,4 @@
-﻿@model Microsoft.EntityFrameworkCore.DbSet<Movie>
+﻿@model List<Movie>
 
 @{
     ViewBag.Title = "Movies";
@@ -7,16 +7,21 @@
 
 <h2>@ViewData["Title"]</h2>
 
+<a asp-action="New"><button class="btn btn-primary">New Movie</button></a>
+
 @if (Model.Any())
 {
-    <ul class="list-group">
-        @foreach (var movie in Model)
-        {
-            <li class="list-group-item">
-                @Html.ActionLink(movie.Name, "Details", "Movies", new {id = movie.Id}, null)
-            </li>
-        }
-    </ul>
+<table class="table table-bordered table-hover">
+    @foreach (var movie in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.Id }, null)
+            </td>
+            <td>@movie.Genre.Name</td>
+        </tr>
+    }
+</table>
 }
 else
 {
